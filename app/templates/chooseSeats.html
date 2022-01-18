@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+ {% block content %}
+
+<div style="background-color: rgb(36, 36, 36); padding: 0px 50px 50px 50px; overflow: hidden; display : block;">
+ <h1 style="color: rgb(255,220,72);padding: 10px 0px 10px 0px">Booking for {{screening.film.title}} on {{screening.date_time.strftime("%A %d %B %H:%M")}}</h1>
+
+    <div style="background-color: rgb(255, 220, 72); padding: 30px; overflow: hidden; border-radius: 25px; width:58%; float:left">
+        <h2>Choose Seats</h2>
+        <p><i>(Press seat multiple times to change ticket type)</i></p>
+        <div id="map-container"></div>
+        <div id="legend-container"></div>
+    </div>
+
+     <div style="background-color: rgb(255, 220, 72); padding: 30px; overflow: hidden; border-radius: 25px; width:38%; float:right">
+       <div id="cart-container"></div>
+      <p> </p>
+      <button style="width: 100%; display: block; border: none;  background-color: #242424; color: white; padding: 14px 28px;   cursor: pointer;
+border-radius: 12px;" id="basket">Continue to Checkout</button>
+     </div>
+
+
+    </div>
+</div>
+
+
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/seatchart.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/seatchart.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+    var options = {
+        // Reserved and disabled seats are indexed
+        // from left to right by starting from 0.
+        // Given the seatmap as a 2D array and an index [R, C]
+        // the following values can obtained as follow:
+        // I = columns * R + C
+        map: {
+            id: 'map-container',
+            rows: {{screen.rows}},
+            columns: {{screen.columns}},
+            // e.g. Reserved Seat [Row: 1, Col: 2] = 7 * 1 + 2 = 9
+            reserved: {
+                {% if reserved %}
+                seats: {{reserved}},
+                {% else %}
+                seats: [],
+                {% endif %}
+            },
+            disabled: {
+                seats: {{g_seats}},
+                rows: {{g_rows}},
+                columns: {{g_columns}}
+            }
+        },
+        types: [
+            { type: "regular", backgroundColor: "#006c80", price: {{prices[0]/100}} },
+            { type: "child", backgroundColor: "#287233", price: {{prices[1]/100}} },
+            { type: "senior", backgroundColor: "#444444", price: {{prices[2]/100}} }
+        ],
+        cart: {
+            id: 'cart-container',
+
+
+            currency: '£',
+        },
+        legend: {
+            id: 'legend-container',
+        },
+        assets: {
+            path: "{{url_for('static', filename='assets')}}",
+        }
+    };
+
+    var sc = new Seatchart(options);
+    $( "#basket" ).click(function() {
+        var basket = sc.getCart();
+        $.ajax({
+            url: "{{screening.id}}/book",
+            type: "POST",
+            data: JSON.stringify({q : basket}),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function() {
+                window.location.href = '/account';
+            }
+        })
+    })
+</script>
+{% endblock %}

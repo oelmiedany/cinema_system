@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <div
+    class="p-5 text-center bg-image"
+    style="
+      background-image: url('https://www.teahub.io/photos/full/40-407463_john-hopkins-mascot-black-and-white.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 550px;
+    "
+  >
+    <div class="mask" style="background-color: rgba(0, 0, 0, 0.0)">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="text-white">
+
+          <h1 style="color:#f1d618;font-weight: bold;padding-top=200px">THE HOME OF INDEPENDENT FILM IN LEEDS. </h1>
+          <form action="" method="POST" name="searchWord">
+            {{ form.hidden_tag() }}
+            {{ form.search(placeholder='Search for films')  }}
+            <!--input class="form-control mr-sm-2" type="search" placeholder="Search for films" aria-label="Search"-->
+            <input class="btn btn-dark" type="submit" value="Search">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<h1>What's On</h1>
+
+
+    <br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Age Rating</th>
+            <th>Genre</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% set count = namespace(value=0) %}
+        {% for film in filmsInfo %}
+            <tr>
+            <td><img src="{{film.posterURL}}" alt="{{film.title}}"></td>
+            <td>{{film.title}}</td>
+            <td>{{film.age_rating}}</td>
+            <td>{{film.genre}}</td>
+            <td><a href="/screenings/{{films[count.value].id}}"><button type="button" class="btn btn-secondary">View Screenings</button></a></td>
+            </tr>
+        {% set count.value = count.value + 1 %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="font-size: 50px;">Screenings for {{ film.title }}</h1>
+
+    <br>
+
+    <h1 style="font-size: 35px">Add Screening</h1>
+    <form method="POST" action="" name="addScreeningForm" style="opacity:1">
+        {{ form.hidden_tag() }}
+        <div style="padding: 5px">Screen ID: {{form.screen_id}}</div>
+        <div style="padding: 5px">Date and Time: {{form.date_time(placeholder='d/m/y h:m:s')}}</div>
+        <div style="padding: 5px">Price (100 = £1.00): {{form.price}}</div>
+        <input style="font-size: 15px;" class="btn btn-dark" type="submit" value="Add Screening">
+    </form>
+
+    <br>
+
+    <h1 style="font-size: 35px">All Screenings</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Screen Number</th>
+            <th>Date and Time</th>
+            <th>Pricing</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for screening in screenings %}
+            <tr>
+            <td>{{screening.screen_id}}</td>
+            <td>{{screening.date_time}}</td>
+            <td>{{screening.price}}</td>
+            <td><a href="/removeScreening/{{film.id}}/{{screening.id}}"><button type="button" class="btn btn-dark">Remove Screening</button></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

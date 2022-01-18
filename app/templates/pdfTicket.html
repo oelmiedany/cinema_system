@@ -1,0 +1,36 @@
+<div><img src="https://i.ibb.co/X28VJ9j/c8af57df940c989c80256e2000346b52-d538c86a-b749-4d68-96a6-098506330984-bmp.png" height="60" />
+<table style="background-color: #e9e9e9; width: 100%;" width="100%">
+<tbody>
+<tr>
+<td style="width: 42.2265%;">
+<h1><span style="color: #f1d510;">Your Ticket</span></h1>
+</td>
+<td style="width: 1.91939%;">&nbsp;</td>
+<td style="width: 0.767754%;">&nbsp;</td>
+<td style="width: 53.9347%;">
+<p><img id="barcode" style="float: right;" title="QR CODE" src="https://api.qrserver.com/v1/create-qr-code/?data={{ Ticket_id }}&amp;size=250x250" alt="" width="100" height="100" /></p>
+<p>&nbsp;</p>
+</td>
+</tr>
+<tr>
+<td style="width: 42.2265%;">
+<h3>{{ Title }}</h3>
+<h4>Screen: {{ Screen }}</h4>
+<p><span style="color: #f1d510;">{{ DateTime }}</span></p>
+</td>
+<td style="width: 1.91939%;">&nbsp;</td>
+<td style="width: 0.767754%;">&nbsp;</td>
+<td style="text-align: right; width: 53.9347%;">
+<p><strong>Ticket ID:</strong> {{ Ticket_id }}</p>
+<p><strong>Ticket Type:</strong> {{ Ticket_type }}</p>
+<p><strong>Ticket Price:</strong> &pound{{ Price }}</p>
+</td>
+</tr>
+<tr>
+<td style="width: 98.8484%;" colspan="4">
+<h3>This ticket is part of order #{{ order_id }}</h3>
+</td>
+</tr>
+</tbody>
+</table>
+</div>

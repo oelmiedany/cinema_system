@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+ {% block content %}
+<h2>Select tickets</h2>
+<form action="" method="POST" name="bookTickets">
+    {{ form.hidden_tag() }}
+
+    <p>Adult: {{ form.adultTickets }}</p>
+    {% for error in form.adultTickets.errors %}
+    [{{ error }}]
+    {% endfor %}
+
+    <p>Child: {{ form.childTickets }}</p>
+    {% for error in form.childTickets.errors %}
+    [{{ error }}]
+    {% endfor %}
+
+    <p>Senior: {{ form.seniorTickets }}</p>
+    {% for error in form.seniorTickets.errors %}
+    [{{ error }}]
+    {% endfor %}
+
+    <p>Disabled: {{ form.disabledTickets }}</p>
+    {% for error in form.disabledTickets.errors %}
+    [{{ error }}]
+    {% endfor %}
+
+    <p><input class="btn btn-dark" type="submit" value="Buy Tickets"></p>
+</form>
+</div>
+{% endblock %}

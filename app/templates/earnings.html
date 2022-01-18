@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="font-size: 50px;">Earnings</h1>
+
+    <br>
+
+    <div style="font-size: 35px;">Total revenue to date: 
+        £{{ "%.2f" | format(totalEarnings) }}
+    </div>
+    
+    <br>
+    <br>
+
+    <h1 style="font-size: 35px;">Revenue for a specific time frame:</h1>
+    <form method="POST" action="" name="earningsForm" style="opacity:1">
+        {{ earningsForm.hidden_tag() }}
+        Start date: {{ earningsForm.startDate(placeholder='dd/mm/YYYY') }}
+        End date: {{ earningsForm.endDate(placeholder='dd/mm/YYYY') }}
+        <input style="font-size: 14px;" class="btn btn-dark" type="submit" value="Apply">
+    </form>
+
+    <div style="font-size: 25px;">Revenue from start to end date:  
+        £{{ "%.2f" | format(timeFrameEarnings) }}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="font-size: 50px;">Admin</h1>
+
+    <br>
+
+    <h1 style="font-size: 35px">Add Film</h1>
+    <form method="POST" action="" name="addFilmForm" style="opacity:1">
+        {{ addFilmForm.hidden_tag() }}
+        {{ addFilmForm.imdb_id(placeholder='Imdb ID') }}
+        <input style="font-size: 14px;" class="btn btn-dark" type="submit" value="Add Film">
+    </form>
+
+    <br>
+    <p><a class="nav-link" href="/tickets_manually" style="color:#ffffff;display:inline-block">Add Tickets Manually</a></p>
+    <br>
+
+    <h1 style="font-size: 35px">All Films</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Total Earnings</th>
+            <th>Earnings per screening</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+            {% set count = namespace(value = 0) %}
+            {% for film in films %}
+            <tr>
+            <td>{{film.title}}</td>
+            <td>{{ "£%.2f" | format(totalRevenues[count.value]) }}</td>
+            <td>{{ "£%.2f" | format(avrgRevenues[count.value]) }}</td>
+            <td><a href="/adminScreenings/{{film.id}}"><button type="button" class="btn btn-dark">Edit Screenings</button></a></td>
+            <td><a href="/removeFilm/{{film.id}}"><button type="button" class="btn btn-warning">Remove Film</button></a></td>
+            </tr>
+            {% set count.value = count.value + 1 %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

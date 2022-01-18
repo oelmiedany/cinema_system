@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div>
+
+      <form method="POST" action="" style="opacity:1">
+        {{ form.hidden_tag() }}
+
+        <h2 align="center" style="color:#f1d618; padding: 20px 20px 0px 20px"><b>Input Ticket Information</b></h2>
+
+
+        <div style="padding-left:20px">User's Email</div>
+        <div style="padding-left:20px"> {{ form.user_email(size=30)}}</div>
+        {% for error in form.user_email.errors %}
+        [{{ error }}]
+        {% endfor %}
+
+        <div style="padding-left:20px">Screening ID</div>
+        <div style="padding-left:20px">{{ form.screening(size=30)}}</div>
+        {% for error in form.screening.errors %}
+        [{{ error }}]
+        {% endfor %}
+
+        <div style="padding-left:20px">Ticket Type</div>
+        <div style="padding-left:20px">{{ form.type}}</div>
+        {% for error in form.type.errors %}
+        [{{ error }}]
+        {% endfor %}
+
+        <div style="padding-left:20px">Seat</div>
+        <div style="padding-left:20px"> {{ form.seat(size=30)}}</div>
+        {% for error in form.seat.errors %}
+        [{{ error }}]
+        {% endfor %}
+
+        <div style="padding-left:20px">Price</div>
+        <div style="padding-left:20px"> {{ form.price(size=5)}}</div>
+        {% for error in form.price.errors %}
+        [{{ error }}]
+        {% endfor %}
+
+        <button style="margin:20px" type="submit">Process Ticket</button>
+      </form>
+      </div>
+
+{% endblock %}

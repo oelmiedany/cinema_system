@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<body
+
+    style="
+        background-color: rgb(36, 36, 36);
+        color: black;
+        "
+>
+
+    <div
+    class="p-5 text-center bg-image"
+    style="
+        background-image: url('https://www.teahub.io/photos/full/40-407463_john-hopkins-mascot-black-and-white.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 375px;
+        "
+    >
+
+    <div class="mask" style="background-color: rgba(0, 0, 0, 0.0)">
+        <div class="d-flex justify-content-center align-items-center h-100">
+          <div style="width: 1200px">
+            <h1 style="color:#f1d618; font-weight:bold; font-size:100px; padding-top:75px">WHAT'S ON </h1>
+            <form style="font-size: 20px; padding-top:75px" action="" method="POST" name="searchForm">
+              {{ searchForm.hidden_tag() }}
+              {{ searchForm.search(placeholder='Search for films')  }}
+              <input class="btn btn-dark" type="submit" value="Search">
+            </form>
+            <form style="font-size: 15px; font-weight: bold; padding-top:25px; color: white" action="" method="POST" name="filtersForm">
+              {{ filtersForm.hidden_tag() }}
+              Genre {{ filtersForm.genre() }}
+              Max Age Rating {{ filtersForm.ageRating() }}
+              <div style="padding-top: 10px;"><input style="font-size: 12px; font-weight: bold;" class="btn btn-light" type="submit" value="Apply"></div>
+            </form>
+
+            {% set count = namespace(value=0) %}
+            {% for film in filmsInfo %}
+            <br>
+            <div style="display: flex; background-color: rgb(255, 220, 72); padding: 0px; border-radius: 25px; overflow: hidden">
+                <div><img style="align-self: left" src="{{film.posterURL}}" alt="{{film.title}}"></div>
+                <div style="padding-left: 30px; width: 825px">
+                <div align="left">
+                    <div style="color: #242424 ;font-size: 50px; font-weight: 500;">{{film.title}}
+                    <img src={{film.age_rating_url}} alt="" height=50></div>
+                    <div style="opacity: 0.7; ">{{film.genre}}</div>
+                    <div style="padding-top: 75px">{{film.plot}}</div>
+                    <div style="padding-top: 75px; opacity: 0.8">Directed By: {{film.director}}</div>
+                    <div style="padding-top: 2px; opacity: 0.8">Starring: {{film.main_actors}}</div>
+                    <div style="padding-top: 20px"><a href="/screenings/{{films[count.value].id}}"><button type="button" class="btn btn-secondary">View Screenings</button></a></div>
+                </div>
+                </div>
+            </div>
+            {% set count.value = count.value + 1 %}
+            {% endfor %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+{% endblock %}

@@ -1,0 +1,48 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; background-color: rgb(36, 36, 36); padding: 50px; overflow: hidden; display : block;">
+
+    <div style="display: flex; background-color: rgb(255, 220, 72); padding: 0px; overflow: hidden; border-radius: 25px">
+        <div><img style="align-self: left" src="{{film.posterURL}}" alt="{{film.title}}"></div>
+        <div style="padding-left: 30px;">
+            <div align="left">
+                    <div style="color: #242424 ;font-size: 50px; font-weight: 500;">{{film.title}}
+                    <img src={{film.age_rating_url}} alt="" height=50></div>
+                    <div style="opacity: 0.7; ">{{film.genre}}</div>
+                    <div style="padding-top: 75px">{{film.plot}}</div>
+                    <div style="padding-top: 75px; opacity: 0.8">Directed By: {{film.director}}</div>
+                    <div style="padding-top: 2px; opacity: 0.8">Starring: {{film.main_actors}}</div>
+            </div>
+        </div>
+    </div>
+    <p></p>
+    <div style="background-color: rgb(255, 220, 72); padding: 30px; overflow: hidden; border-radius: 25px">
+        <h1>Screenings</h1>
+        <div style = "display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); grid-gap: 10px;">
+            {% if screenings %}
+
+                {% for screening in screenings %}
+
+                    <div>
+                        <a href="/chooseSeats/{{screening.id}}"><button type="button" class="btn btn-secondary">{{screening.date_time.strftime("%A %d %B %H:%M")}}</button></a>
+                    </div>
+                {% endfor %}
+            {% else %}
+             <p>No tickets in basket</p>
+            {% endif %}
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}

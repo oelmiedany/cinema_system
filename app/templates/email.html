@@ -1,0 +1,35 @@
+<p>&nbsp;</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://xym0q.mjt.lu/tplimg/xym0q/b/sphp5/p32n.png" alt="" width="300" height="103" /></p>
+<table style="height: 77px; margin-left: auto; margin-right: auto;" width="75%">
+<tbody>
+<tr>
+<td style="width: 75%; background-color: #f1d618; text-align: center;">
+<h1 style="text-align: center;">Thank Your For Your Order.</h1>
+<h2 style="text-align: center;">Your Tickets are below</h2>
+<table style="width: 100%;">
+<tbody style="width: 100%;">
+<tr>
+<td style="text-align: center;"><span style="color: #ffffff;"><strong>&nbsp;Film</strong></span></td>
+<td style="text-align: center;"><span style="color: #ffffff;"><strong>Date</strong></span></td>
+<td style="text-align: center;"><span style="color: #ffffff;"><strong>Type</strong></span></td>
+<td style="text-align: center;"><span style="color: #ffffff;"><strong>Price&nbsp;</strong></span></td>
+<td style="text-align: center;"><span style="color: #ffffff;"><strong>Link</strong></span></td>
+</tr>
+{% for ticket in tickets %}
+    <tr>
+        <td style="text-align: center;">{{ ticket.screening.film.title }}</td>
+        <td style="text-align: center;">{{ ticket.screening.date_time.strftime("%A %d %B %H:%M") }}</td>
+        <td style="text-align: center;">
+            {% if ticket.type == 0 %}Regular {% endif %}
+            {% if ticket.type == 1 %}Child {% endif %}
+            {% if ticket.type == 2 %}Senior {% endif %}
+        </td>
+        <td style="text-align: center;">{{'{0:.2f}'.format(ticket.price/100)}}</td>
+        <td style="text-align: center; background-color: #000000;"><a href="http://127.0.0.1:5000/pdfTicket/{{ticket.id}}"><span style="color: #ffffff;">Download</span></a></td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+</tr>
+</tbody>
+</table>

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display: flex; background-color: rgb(36, 36, 36); padding: 50px; overflow: hidden; display : block;">
+
+    <div style="background-color: rgb(255, 220, 72); padding: 30px; overflow: hidden; border-radius: 25px">
+        <h1>Basket</h1>
+        {% if basket %}
+            <form method="POST" id="update_form">
+                {% set count = namespace(value = 0) %}
+            <table style="width:100%">
+                <tr>
+                    <th>Film Name</th>
+                    <th>Screening Date/Time</th>
+                    <th>Ticket Type</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+              {% for item in basket %}
+                {% set s = films[screenings[item[0] - 1].film_id - 1] %}
+                    <tr>
+                        <td>{{s.title}}</td>
+                        <td>{{screenings[item[0] - 1].date_time.strftime("%A %d %B %H:%M")}}</td>
+                        <td>
+                            {% if item[1] == 0 %} Regular {% endif %}
+                            {% if item[1] == 1 %} Child {% endif %}
+                            {% if item[1] == 2 %} Senior {% endif %}
+                        </td>
+                        <td>
+                            {% if item[1] == 0 %} £{{ '{0:.2f}'.format(screenings[item[0] - 1].price/100) }} {% endif %}
+                            {% if item[1] == 1 %} £{{ '{0:.2f}'.format(screenings[item[0] - 1].price * 0.7/100) }} {% endif %}
+                            {% if item[1] == 2 %} £{{ '{0:.2f}'.format(screenings[item[0] - 1].price * 0.6/100) }} {% endif %}
+                        </td>
+                        <td>
+                            <input type="number" id="quantity" name="quantity" maxlength="1" size="1" value="1" min="0" max="1">
+                        </td>
+                    </tr>
+                {% set count.value = count.value + 1 %}
+              {% endfor %}
+            </table>
+                <p></p>
+
+                <button type="button" id="checkout" style="width: 40%; height: 50px; display: block; border: none;  background-color: #242424; color: white;   cursor: pointer;
+border-radius: 12px;float: right;">Checkout</button>
+                <button type="button" id="fupdate" style="width: 20%; height: 50px; display: block; border: none;  background-color: rgb(255, 220, 72); border: 2px solid black; color: black;   cursor: pointer;
+border-radius: 12px;float: left;">Update Cart</button>
+            </form>
+        {% else %}
+        <p>No tickets in basket</p>
+        {% endif %}
+    </div>
+
+    <div style="background-color: rgb(255, 220, 72); padding: 30px; overflow: hidden; border-radius: 25px">
+        <h1>Previously Purchased Tickets</h1>
+        <table style="width:100%">
+                <tr>
+                    <th>Film Name</th>
+                    <th>Screening Date/Time</th>
+                    <th>Ticket Type</th>
+                    <th>Seat</th>
+                    <th>Price</th>
+                    <th>Ticket Link</th>
+                </tr>
+            {% for order in orders %}
+                {% for ticket in order.tickets %}
+                    <tr>
+                        <td>{{ticket.screening.film.title}}</td>
+                        <td>{{ticket.screening.date_time.strftime("%A %d %B %H:%M")}}</td>
+                        <td>
+                            {% if ticket.type == 0 %}Regular {% endif %}
+                            {% if ticket.type == 1 %}Child {% endif %}
+                            {% if ticket.type == 2 %}Senior {% endif %}
+                        </td>
+                        <td>{{ ticket.seat }}</td>
+                        <td>{{ '{0:.2f}'.format(ticket.price/100) }}</td>
+
+                        <td><a style="color:black" href="/pdfTicket/{{ticket.id}}">Download PDF Ticket</a></td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+  $( "#fupdate" ).click(function() {
+    var sizes = [];
+    var fdata = $('#update_form').serializeArray();
+    var counter = 0;
+    for (let i = 0; i < fdata.length; i++) {
+      if (!$.isNumeric(fdata[i]['value'])) {
+        sizes.push(fdata[i]['value'])
+      }
+    }
+    $('select').each(function() {
+      var obj = $(this)
+      $(this).val(sizes[counter]).change()
+      counter++
+    })
+    for (let i = 0; i < sizes.length; ++i) {
+      $('#select_id').val(i)
+    }
+    $.ajax({
+      url: "update",
+      type: "POST",
+      data: JSON.stringify({q : fdata}),
+      dataType: 'json',
+      contentType: 'application/json'
+    })
+    $( document ).ajaxComplete(function() {
+      location.reload()
+    })
+  })
+  $( "#checkout" ).click(function() {
+    var fdata = $('#update_form').serializeArray()
+    $.ajax({
+      url: "update",
+      type: "POST",
+      data: JSON.stringify({q : fdata}),
+      dataType: 'json',
+      contentType: 'application/json'
+    })
+  })
+</script>
+<script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript">
+
+  var checkoutButton = document.getElementById("checkout");
+  var stripe = Stripe("pk_test_51IUAZ0K1PTp3CGw0wrX4cVd4Umikje2mUckNi9jwnWGyJZBVKtHtaLI0dcnon7gcYmjh7ZFt6iv6wJoIfmnp7FEf00elhimopG");
+  checkoutButton.addEventListener("click", function () {
+    fetch("/create-checkout-session", {
+      method: "POST",
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (session) {
+        return stripe.redirectToCheckout({ sessionId: session.id });
+      })
+      .then(function (result) {
+        if (result.error) {
+          alert(result.error.message);
+        }
+      })
+      .catch(function (error) {
+        console.error("Error:", error);
+      });
+  });
+</script>
+
+{% endblock %}
